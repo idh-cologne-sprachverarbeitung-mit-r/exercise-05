@@ -26,4 +26,4 @@ jobs:
       
     # Runs a single command using the runners shell
     - name: Run test
-      run: Rscript test.R
+      run: Rscript test.R -e 'quit(status=sum(as.data.frame(testthat::test_file("test.R"))$failed))'
