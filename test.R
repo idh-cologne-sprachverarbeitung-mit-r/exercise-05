@@ -26,9 +26,9 @@ test_that("ATM works correctly", {
 })
 
 test_that("Observed agreement is calculated correctly", {
-	expect_equal(po(devmatrix), 0.378)
+	expect_equal(po(devmatrix), 0.378, tolerance=1e-3)
 })
 
 test_that("Expected agreement is calculated correctly", {
-	expect_equal(pe(devmatrix), 0.213)
+	expect_equal(pe(devmatrix), 0.213, tolerance=1e-3)
 })
