@@ -26,4 +26,4 @@ jobs:
       
     # Runs a single command using the runners shell
     - name: Run test
-      run: R -e 'testthat::test_file("test.R")'
+      run: Rscript test.R
