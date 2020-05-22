@@ -35,6 +35,8 @@ Fleiss' Kappa is a metric to compare annotators on clearly defined items: For ea
 
 The expected agreement tells us how much agreement we can expect if everyone just makes random guesses. This is therefore the probability that two annotators make the same decision by chance and based on the probability that a category is selected in the first place. This $p_j$ is calculated as $\frac{1}{Nn}\sum_{i=1}^N n_{ij}$.
 
+<img src="https://render.githubusercontent.com/render/math?math=\frac{1}{Nn}\sum_{i=1}^N n_{ij}">
+
 
 
 ## Step 4
