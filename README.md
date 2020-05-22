@@ -29,12 +29,14 @@ Again (as last week), open the file `R/exercise.R` in your favorite text editor.
 
 ### 3.1 ATM
 
+TODO
 
 ### 3.2 Fleiss Kappa
 Fleiss' Kappa is a metric to compare annotators on clearly defined items: For each word, for instance, annotators define a part of speech tag. Fleiss Kappa then tells us how similar their judgments are. Kappa is defined in two parts: Expected and observed agreement. Please define functions for both parts. The *input* to both functions is a matrix that contains numbers. Each annotated word is represented by one row, and each possible part of speech tag by one column. The number in the matrix tells us how many annotators have selected this part of speech. The file `R/kappa.R` contains a matrix that you can use for development. It is the same matrix that is used on the [Wikipedia article](https://en.wikipedia.org/wiki/Fleiss%27_kappa), so if you want to compare intermediate results, you can do that. Your functions should of course work with arbitrary (valid) matrices.
 
 The expected agreement tells us how much agreement we can expect if everyone just makes random guesses. This is therefore the probability that two annotators make the same decision by chance and based on the probability that a category is selected in the first place. This *p<sub>j</sub>* is calculated as the sum over the entire column *j*, divided by the number of rows (i.e., words, *N*) multiplied by the number of annotators (*n*). The overall expected agreement is then the sum of all squared *p<sub>j</sub>* values.
 
+TODO
 
 
 ## Step 4
