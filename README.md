@@ -59,7 +59,7 @@ The observed agreement informs us about the actual agreement in the data. It is 
 Please define two functions: `po(m)` to calculate the observed agreement and `pe(m)` for the expected agreement. You can assume that the matrices are correctly formatted and valid.
 
 ## Step 4
-Your file `R/exercise.R` should now contain a number of lines with assignment statements (using `=`, `<-`, or `->`). Don't forget to save your file.
+Don't forget to save your file.
 Now turning back to git: Add your file to the staging area (`git add R/exercise.R`), commit it (`git commit -m ""`, you need to fill in a commit message), and push it to the server (`git push --set-upstream origin BRANCHNAME`).
 
 ## Step 5
