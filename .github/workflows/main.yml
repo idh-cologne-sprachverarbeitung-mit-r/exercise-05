@@ -26,4 +26,4 @@ jobs:
       
     # Runs a single command using the runners shell
     - name: Run test
-      run: R -e 'if (sum(as.data.frame(testthat::test_file("test.R"))$failed)>0) stop("Tests failed.")'
+      run: Rscript test.R
