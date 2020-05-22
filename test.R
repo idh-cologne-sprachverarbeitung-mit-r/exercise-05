@@ -30,5 +30,5 @@ test_that("Observed agreement is calculated correctly", {
 })
 
 test_that("Expected agreement is calculated correctly", {
-	expect_equal(pe(devmatrix), 0.213, tolerance=1e-3)
+	expect_equal(pe(devmatrix), 1.213, tolerance=1e-3)
 })
