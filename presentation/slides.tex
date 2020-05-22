@@ -1,0 +1,828 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage[english]{babel}
+\usepackage{outlines}
+\usepackage{csquotes}
+\usepackage[style=authoryear-comp]{biblatex}
+\usepackage{slidecite}
+\usepackage{tikz}
+\usepackage{soul}
+\usepackage{fontawesome}
+\usepackage{lingmacros}
+\usepackage{bbding}
+\usepackage{booktabs}
+\usepackage[normalem]{ulem}
+\usepackage{siunitx}
+\usepackage{tikzsymbols}
+\usepackage{dcolumn}
+\usepackage{multirow}
+\usepackage{wasysym}
+\usepackage{pifont}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{bbding}
+\usepackage{listings}
+
+
+\addbibresource{lit.bib}
+
+\usetikzlibrary{calc,positioning}
+\usetikzlibrary{arrows}
+\usetikzlibrary{fit}
+\usetikzlibrary{intersections}
+\usetikzlibrary{trees}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shapes.symbols}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{shapes.arrows}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{matrix}
+
+\usefonttheme{professionalfonts}
+\setbeamertemplate{navigation symbols}{}
+
+\title{Week 5: Functions}
+\subtitle{Quantitative Textanalyse mit R}
+\author{Nils Reiter}
+
+\lstset{basicstyle=\small\ttfamily, % print whole listing small 
+	keywordstyle=\color{blue}, % underlined bold black keywords 
+	%identifierstyle=\color{brown}, % nothing happens 
+	commentstyle=\color{olive},
+	stringstyle=\color{red}, % typewriter type for strings 
+	showstringspaces=false,
+	morekeywords={function}}
+
+\begin{document}
+\pgfdeclarelayer{background} 
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+\frame{\maketitle}
+
+\begin{frame}[fragile]{R so far}
+\begin{outline}
+\1 Vector, list, matrix, data.frame
+\2 Vectors are 1-based (i.e., start with 1)
+\1 Types: numeric, character, logical
+\1 Expressions: Assignments of values to variable names
+\1 Selecting elements in containers: [ ]
+\end{outline}
+\pause
+\begin{lstlisting}[language=r]
+(1:100)[c(TRUE,FALSE)] # every second element
+m <- matrix(1:100, nrow=25)
+m[4,5] # row 4 col 5
+m[4,]  # row 4
+m[,5]  # col 5
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]{Control structures}
+\begin{block}{Grouped expressions: \lstinline!{ expr_1, expr_2, ..., expr_n }!}
+\begin{outline}
+\1 Commands can be grouped with curly braces
+\1 The value of the whole group is the value of the last expression within the group
+\1 Grouped expressions do not form a scope on their own
+\end{outline}
+\end{block}
+\pause
+\begin{block}{Conditional execution: \lstinline!if (expr_1) expr_2 else expr_3!}
+\begin{outline}
+\1 \lstinline{expr_2} only executed if \lstinline{expr_1} evaluates to a single logical TRUE value
+\1 Implicit use of \lstinline{as.logical(expr_1)[1]}
+\1 Warning if \lstinline{length(expr_1)>1}
+\end{outline}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Control structures}
+\begin{block}{Loops: \lstinline!for (name in expr) expr_2 !}
+\begin{outline}
+\1 \lstinline!expr_2! repeatedly evaluated, while \lstinline!name! is set to the elements of \lstinline!expr!
+\1 In R, no difference between `foreach' and `for'
+\1 \lstinline!for i in 1:100 print(i)! shows their equivalence
+\pause
+\1 Loops are used \emph{much less} in R compared to other languages
+\2 Most operations work in a \emph{vectorized} fashion: We call a function that gets executed to every element of the vector
+\2 This vectorization is much faster, because it can be processed en bloc
+\2 Rule of thumbs: Avoid writing for-loops
+\2 There is even a vectorized version of if: \lstinline{ifelse(condition,a,b)}
+\end{outline}
+\end{block}
+\end{frame}
+
+\section{Functions}
+
+\begin{frame}[fragile]{Functions}
+\begin{outline}
+\1 Functions are mini-programs
+\1 Named collections of commands
+\1 Similar to other programming languages
+\1 Syntax
+\2 Function definition: \lstinline!name <- function(arg_1, arg_2, ...) expression!
+\2 Function call: \lstinline!name(arg_1, arg_2, ...)!
+\pause
+\2 If the name starts and ends with \%, and the function takes two arguments, it can be used as a binary operator \\
+\begin{lstlisting}
+"%add%" <- function(x,y) {sum(x,y)}
+5 %add% 7 # returns 12
+\end{lstlisting} 
+\end{outline}
+\end{frame}
+
+\begin{frame}[fragile]{Example}
+\begin{outline}
+\1 Accuracy: Percentage of correctly classified instances
+\1 Input: Two lists of labels
+\1 Output: Number
+\end{outline}
+\begin{lstlisting}
+accuracy <- function(gold, system) {
+    # let's do that together
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example}
+\begin{outline}
+\1 Accuracy: Percentage of correctly classified instances
+\1 Input: Two lists of labels
+\1 Output: Number
+\end{outline}
+\begin{lstlisting}
+accuracy <- function(gold, system)
+    sum(gold == system)/length(gold)
+\end{lstlisting}
+Any remaining issues? What could go wrong?
+\end{frame}
+
+\begin{frame}{Example}{Edge cases}
+\begin{outline}
+\0 Not the same length
+\1 We should verify that the vectors have the same length
+\0 Different types
+\1 Types are coerced to character if necessary
+\2 Depending on use case: Maybe issue a warning
+\0 Different factors
+\1 Not a problem, factor levels can be compared as character vectors
+\end{outline}
+\end{frame}
+
+\begin{frame}[fragile]{Named Arguments}
+\begin{outline}
+\1 Function arguments can be named
+\1 Named arguments can be given in any order
+\2 If both named and positional arguments are mixed, positional arguments go first
+\1 Using named arguments increases readability of your code \\
+\lstinline!accuracy(system=listOfLabels, gold=realLabels)
+\end{outline}
+\end{frame}
+
+\begin{frame}[fragile]{Default Values}
+\begin{outline}
+\1 Specified in the function definition
+\begin{lstlisting}
+accuracy <- function(gold, system, times=100)
+    times * (sum(gold == system)/length)
+\end{lstlisting}
+\1 Can be defined based on other arguments (!)
+\begin{lstlisting}
+accuracy <- function(gold, system, limit=1:length(gold))
+    sum(gold[limit] == system[limit])/length(limit)
+\end{lstlisting}
+\end{outline}
+\end{frame}
+
+\begin{frame}[fragile]{Passing on arguments}
+\begin{outline}
+\1 Sometimes we want to pass on arguments to other functions, in particular if we write `wrapper functions' (i.e., functions that wrap another function)
+\1 In these cases, we can use the \lstinline!...! argument (yes, it's three regular dots)
+\1 All arguments not defined by our function are passed on to another function
+\end{outline}
+\begin{lstlisting}
+partOfRandomVector <- function(n, x, ...) {
+    v <- runif(n, ...)
+    v[v<x]
+}
+\end{lstlisting}
+We can now use all (named) arguments of \lstinline!runif! as arguments for \lstinline!partOfRandomVector! without further declaration
+\end{frame}
+
+\begin{frame}[fragile]{Anonymous functions (and apply)}
+\begin{outline}
+\1 Similar to passing literal arguments to functions (as we have done before), we can pass anonymous functions
+\1 They look the same, but are not assigned to a name: \lstinline!function(arg_1, arg_2) expression!
+\1 The function \lstinline!apply()! expects a function as third argument
+\2 \lstinline!apply()! applies this function to each row or column of a given matrix
+\end{outline}
+\begin{example}
+\begin{lstlisting}
+m <- matrix(1:100, ncol=5)
+apply(m, 1, function(x) { sum(x**2) } )
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\section{Exercise}
+
+\begin{frame}{Exercise 5}
+\begin{outline}
+\1 At the usual place: \url{https://github.com/idh-cologne-sprachverarbeitung-mit-r/exercise-05}
+\2 Includes these slides
+\1 Less exercises, but a bit more complicated
+\end{outline}
+\end{frame}
+
+\begin{frame}[fragile]{ATM}
+\begin{outline}
+\1 When we withdraw money from an ATM, it has to decide which bills it gives
+\1 We will implement this function in R
+\1 The function \lstinline!atm(v)! takes a numeric value and returns a named list
+\2 The names are the bill types (i.e., 50)
+\2 The values are the number of bills to give us
+\1 How to decide?
+\2 We want as few bills as possible (this is not what real ATMs to \dots)
+\end{outline}
+\pause
+\begin{example}
+\begin{lstlisting}
+> unlist(atm(50))
+500 200 100  50  20  10   5 
+  0   0   0   1   0   0   0 
+> unlist(atm(195))
+500 200 100  50  20  10   5 
+  0   0   1   1   2   0   1 
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\begin{frame}{Fleiss' Kappa}
+\begin{outline}
+\1 Fleiss' Kappa is a metric to calculate inter-annotator agreement
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 &   &   \\
+2 &   &   & 1 & 2 \\
+3 & 1 & 1 &   & 1 \\
+4 & 3 &   &   &   \\
+\bottomrule
+\end{tabular}
+\1 Observed agreement: How many agreements have been achieved?
+\1 Expected agreement: How many agreements can be expected if everyone guesses?
+\end{outline}
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Observed Agreement}
+
+\begin{block}{Normalized observed agreement for item $i$}
+Problem: $k$ categories, $n$ annotators, $N$ items 
+\uncover<2->{\begin{equation*}\only<4->{\hat P_i = }\uncover<3->{\alert<3>{\underbrace{\frac{1}{n(n-1)}}_{\textnormal{Scaling for annotators}}} \times }\underbrace{\sum_{j=1}^{k} n_{i,j}(n_{i,j}-1)}_{\textnormal{abs. pairwise agr. for item }i} \end{equation*}}
+\end{block}
+
+\begin{block}<5->{Normalized observed agreement for all items}
+\begin{equation*}
+	P_o = \frac{1}{N} \sum_{i=1}^N \hat P_i
+\end{equation*}
+
+(this is just the arithmetic mean, a.k.a. average)
+\end{block}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node[at=(current page.north east),font=\tiny,anchor=north east,align=center] {
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 &   &   \\
+2 &   &   & 1 & 2 \\
+3 & 1 & 1 &   & 1 \\
+4 & 3 &   &   &   \\
+\bottomrule
+\end{tabular}\\
+$N = 4, k = 4, n = 3$
+};
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Expected Agreement}
+\begin{outline}
+\1 Probability that category $j$ gets selected (by one annotator)
+\begin{equation}
+	\uncover<3->{p_j =} \only<2->{\underbrace{\frac{1}{nN}}_{\textnormal{Possible events (all annotations)}} \times}\underbrace{\sum_{i=1}^N n_{i,j}}_{\textnormal{positive events (=annotations with } j \textnormal{)}}\nonumber
+\end{equation}
+\1<4-> Probability that two annotators select category $j$
+\begin{equation*}
+	p_j \times p_j = p_j^2
+\end{equation*}
+\1<5-> Probability that two annotators are in agreement (over all categories):
+\begin{equation}
+P_e = \sum_{j=1}^k p_j^2\nonumber
+\end{equation}
+\end{outline}
+\begin{tikzpicture}[remember picture,overlay]
+\node[at=(current page.north east),font=\tiny,anchor=north east,align=center] {
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 &   &   \\
+2 &   &   & 1 & 2 \\
+3 & 1 & 1 &   & 1 \\
+4 & 3 &   &   &   \\
+\bottomrule
+\end{tabular}\\
+$N = 4, k = 4, n = 3$
+};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Fleiss' Kappa \parencite{Fleiss:1971aa}}
+
+\begin{eqnarray*}
+p_j & & \textnormal{Probability for } j \\
+\begin{ensuremath}
+\hat P_i
+\end{ensuremath} & & \textnormal{Observed agreement for } i\\
+\only<2->{P_o & = & \frac{1}{N} \sum_{i=1}^N \hat P_i \\}
+\only<3->{P_e & = & \sum_{j=1}^k p_j^2 \\}
+\only<4->{\kappa & = & \frac{P_o-P_e}{1-P_e}}
+\end{eqnarray*}
+
+\begin{outline}
+\only<5->{
+\1 $P_o - P_e$: Tatsächlich erreichtes, nicht-zufälliges Agreement
+\1 $1 - P_e$: Maximal erreichbares, nicht-zufälliges Agreement
+}
+\only<6->{
+\1 $-\infty < \kappa < 1$: Je höher desto besser
+\2 Extremfälle?
+}
+\end{outline}
+\end{frame}
+
+\appendix
+
+\section{Fleiss' Kappa}
+
+\frame{\sectionpage}
+
+\begin{frame}{Inter-Annotator Agreement}
+\begin{outline}
+\1 Warum quantitativ messen?
+\2 Weil wir vergleichen wollen, über verschiedene Konfigurationen hinweg
+\3 (5 oder 6 Kategorien, 2 oder 3 AnnotatorInnen, 10 oder 20 Instanzen)
+\pause
+\1 Wie messen?
+\2 Problem: Wir wissen nicht was richtig ist
+\3 IAA ist ausschließlich eine Aussage über die Übereinstimmung, nicht über die Korrektheit
+\pause
+\2 Verfahren das für beliebige Zahlen von Kategorien, AnnotatorInnen oder Instanzen funktioniert
+\2 Wie oft haben zwei AnnotatorInnen gleich gewählt? (paarweise Übereinstimmung)
+\end{outline}
+\end{frame}
+
+\begin{frame}[fragile]{Inter-Annotator Agreement}{Datenstrukturen}
+
+\centering
+
+\begin{tabular}{lccc}
+\toprule
+Word & A1 & A2 & A3 \\
+\midrule
+Zwei & ART & ART & CARD \\
+Hunde & NN & NNS & NNS \\
+bellen & VVFIN & VVINF & VVFINX \\
+. & \$. & \$. & \$. \\
+\bottomrule
+\end{tabular}
+
+\pause
+\vspace{1em}
+$\Downarrow$ Konversion $\Downarrow$
+\vspace{1em}
+
+\begin{tabular}{lcccccccccccc}
+\toprule
+Word & ART & CARD & NN & NNS & VVFIN & VVINF & VVFINX & \$. \\
+\midrule
+Zwei & 2 & 1 \\
+Hunde & & & 1 & 2 \\
+bellen & & & & & 1 & 1 & 1 \\
+. & & & & & & & & 3 \\
+\bottomrule
+\end{tabular}
+
+\end{frame}
+
+\begin{frame}[fragile]{Inter-Annotator Agreement}{Paarungen}
+
+\begin{tabular}{lcccccccccccc}
+\toprule
+Word & ART & CARD & NN & NNS & VVFIN & VVINF & VVFINX & \$. \\
+\midrule
+Zwei & 2 & 1 \\
+Hunde & & & 1 & 2 \\
+bellen & & & & & 1 & 1 & 1 \\
+. & & & & & & & & \alert<3>{3} \\
+\bottomrule
+\end{tabular}
+
+\begin{outline}
+\1 Wieviele paarweise Übereinstimmungen gibt es (absolut gemessen)?
+\pause
+\2 $1 + 1 + 0 + 3 = 5$
+\pause
+\1 Warum 3? Binomialkoeffizient!
+\end{outline}
+
+\end{frame}
+
+\begin{frame}{Binomialkoeffizient / `n choose k'}{Anzahl möglicher $k$-elementiger Teilmengen aus $n$ Dingen}
+\begin{equation*}
+{n\choose k} = \frac{n!}{k!(n-k)!}
+\end{equation*}
+\pause
+Fakultät:
+\begin{equation*}
+n! = n(n-1)(n-2)(n-3)\cdots 1
+\end{equation*}
+\pause
+Für $k=2$:
+\begin{eqnarray*}
+{n\choose 2} & = & \frac{n!}{(n-2)!2!} \pause = \frac{1}{2}\frac{n!}{(n-2)!} \\
+\pause
+& = & \frac{1}{2}\frac{n(n-1)(n-2)(n-3)\cdots 1}{(n-2)(n-3)\cdots 1} \\
+\pause
+& = & \frac{1}{2}n(n-1)	\\
+\end{eqnarray*}
+\end{frame}
+
+\begin{frame}{Binomialkoeffizient / `n choose k'}{Anzahl möglicher $k$-elementiger Teilmengen aus $n$ Dingen}
+Reihenfolge: Sind $(a,b)$ und $(b,a)$ das gleiche Paar?
+\begin{outline}
+\1 Ja: $\frac{1}{2}n(n-1)$
+\1 Nein: $n(n-1)$
+\end{outline}
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Paarungen}
+\begin{table}
+\begin{tabular}{rr}
+\toprule
+$n$ & ${n\choose 2}$ \\
+\midrule
+1 & 0 \\
+2 & 1 \\
+3 & 3 \\
+4 & 6 \\
+5 & 10 \\
+10 & 45 \\
+100 & 4.950 \\
+\bottomrule
+\end{tabular}
+\caption{$n\choose 2$ Werte für steigende $n$}
+\end{table}
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Problems}
+\begin{columns}[T]
+\begin{column}{.45\paperwidth}
+Situation 1:
+
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 &   &   \\
+2 &   &   & 1 & 2 \\
+3 & 1 & 1 &   & 1 \\
+4 & 3 &   &   &   \\
+\bottomrule
+\end{tabular}
+\begin{outline}
+\1 3 annotators (=n)
+\1 5 pairwise agreements
+\end{outline}
+\end{column}
+
+\pause
+
+\begin{column}{.45\paperwidth}
+Situation 2:
+
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 & 1 &   \\
+2 &   & 1 & 1 & 2 \\
+3 & 1 & 1 & 1 & 1 \\
+4 & 3 & 1 &   &   \\
+\bottomrule
+\end{tabular}
+\begin{outline}
+\1 4 annotators (=n)
+\1 5 pairwise agreements
+\end{outline}
+\end{column}
+\end{columns}
+\pause
+\vspace{2em}
+How much worse is Situation 2 compared to 1?\\
+$\rightarrow$ Scaling!
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Scaling}
+\begin{outline}
+\1 Sometimes, values have different scales
+\2 i.e., different min and max values
+\1 Scaling: Apply a function to values so that they are comparable
+\2 Simplest way: Divide by the (theoretical) maximum
+\pause
+\1 What's the theoretical maximum here?
+\2 If all annotators agree: ${n\choose 2} = \frac{1}{2}n(n-1)$
+\pause
+\1 Scaling $\simeq$ Normalization
+\end{outline}
+\end{frame}
+
+\begin{frame}
+\begin{columns}[T]
+\begin{column}{.45\paperwidth}
+Situation 1:
+
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 &   &   \\
+2 &   &   & 1 & 2 \\
+3 & 1 & 1 &   & 1 \\
+4 & 3 &   &   &   \\
+\bottomrule
+\end{tabular}
+\begin{outline}
+\1 3 annotators (=n)
+\1 5 pairwise agreements
+\1 Scaled: $\frac{5}{4{3\choose 2}} = \frac{5}{4\times 3} = \frac{5}{12} = 0.416$
+\end{outline}
+\end{column}
+
+\begin{column}{.45\paperwidth}
+Situation 2:
+
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 & 1 &   \\
+2 &   & 1 & 1 & 2 \\
+3 & 1 & 1 & 1 & 1 \\
+4 & 3 & 1 &   &   \\
+\bottomrule
+\end{tabular}
+\begin{outline}
+\1 4 annotators (=n)
+\1 5 pairwise agreements
+\1 Scaled: $\frac{5}{4{4\choose 2}} = \frac{5}{4 \times 6} = \frac{5}{24} = 0.208$
+\end{outline}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Observed Agreement}
+
+\begin{block}{Normalized observed agreement for item $i$}
+Problem: $k$ categories, $n$ annotators, $N$ items 
+\uncover<2->{\begin{equation*}\only<4->{\hat P_i = }\uncover<3->{\alert<3>{\underbrace{\frac{1}{n(n-1)}}_{\textnormal{Scaling for annotators}}} \times }\underbrace{\sum_{j=1}^{k} n_{i,j}(n_{i,j}-1)}_{\textnormal{abs. pairwise agr. for item }i} \end{equation*}}
+\end{block}
+
+\begin{block}<5->{Normalized observed agreement for all items}
+\begin{equation*}
+	P_o = \frac{1}{N} \sum_{i=1}^N \hat P_i
+\end{equation*}
+
+(this is just the arithmetic mean, a.k.a. average)
+\end{block}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node[at=(current page.north east),font=\tiny,anchor=north east,align=center] {
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 &   &   \\
+2 &   &   & 1 & 2 \\
+3 & 1 & 1 &   & 1 \\
+4 & 3 &   &   &   \\
+\bottomrule
+\end{tabular}\\
+$N = 4, k = 4, n = 3$
+};
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Large Operators}
+\begin{equation*}
+\sum_{i=0}^n f(i) = f(0) + f(1) + f(2) + \cdots f(n)
+\end{equation*}
+\pause
+\begin{example}
+\begin{eqnarray*}
+\sum_{i=0}^4 i^5 & = & 0^5 + 1^5 + 2^5 + 3^5 + 4^5 = 1300\\
+\pause
+\prod_{i=1}^3 (5i+1) & = & (5(1)+1) \times (5(2)+1) \times (5(3)+1) \\
+& = & 6+11+16 = 33\\
+\end{eqnarray*}	
+\end{example}
+\end{frame}
+
+% \begin{frame}{Inter-Annotator Agreement}{Observed Agreement}
+%
+% \begin{outline}
+% \1 Input table \\\begin{tabular}{rcc}
+% 		\toprule
+% 		Categories $j$ $\rightarrow$ & A & B \\
+% 		\midrule
+% 		\multirow{3}{*}{\begin{turn}{90}Items $i$\end{turn}}
+% 		& 3 & 0 \\
+% 		& 2 & 1 \\
+% 		& 0 & 3 \\
+% 		\bottomrule
+% 	\end{tabular}
+% \1 Normalized observed agreement for item $i$
+% \2 $\hat P_i = \frac{1}{n(n-1)} \times \sum_{j=1}^{k} n_{i,j}(n_{i,j}-1)$
+% \1 Normalized observed agreement for all items
+% \2 $P_o = \frac{1}{N}\times\sum_{i=1}^N \hat P_i$
+% \end{outline}
+%
+% \end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Expected Agreement}
+\begin{columns}[T]
+\begin{column}{.45\paperwidth}
+Situation 1:
+
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 &   &   \\
+2 &   &   & 1 & 2 \\
+3 & 1 & 1 &   & 1 \\
+4 & 3 &   &   &   \\
+\bottomrule
+\end{tabular}
+\begin{outline}
+\1 $n=3$ annotators
+\1 $k=4$ categories
+\1 5 pairwise agreements
+\end{outline}
+\end{column}
+
+\begin{column}{.45\paperwidth}
+Situation 2:
+
+\begin{tabular}{lccc}
+\toprule
+Word & A & B & C \\
+\midrule
+1 & 2 & 1 &   \\
+2 & 2 &   & 1 \\
+3 & 1 & 1 & 1 \\
+4 & 3 &   &   \\
+\bottomrule
+\end{tabular}
+\begin{outline}
+\1 $n=3$ annotators
+\1 $k=3$ categories
+\1 5 pairwise agreements
+\end{outline}
+\end{column}
+\end{columns}
+\vspace{2em}
+What situation had the better agreement?
+How much better?
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Expected Agreement}
+\begin{outline}
+\1 How likely is it (in general) that category $A$ is selected?
+\end{outline}
+
+\begin{block}<2->{Excurs: Relative Frequencies}
+\begin{columns}[onlytextwidth,T]
+\begin{column}{\dimexpr\linewidth-30mm-5mm}
+\begin{outline}
+\1<2-> How often do you win a game?
+\1<3-> $\frac{\textnormal{Number of positive events (= wins)}}{\textnormal{Number of total events(= games played)}}$
+\1<4-> $p(\textnormal{"selecting category A"}) =\ ?$
+\end{outline}
+\end{column}
+\end{columns}
+\begin{outline}
+\1<5-> Relative frequency is an \emph{estimate} of the probability
+\2 Probability: Theoretical concept
+\2 Relative frequency: Result of actual experiments
+\2 Assumption: The more experiments I do, the more similar is the relative frequency to the probability	
+\end{outline}
+\end{block}
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Expected Agreement}
+	
+\begin{columns}[T]
+\begin{column}{.45\paperwidth}
+Situation 1:
+
+\begin{tabular}{lcccc}
+\toprule
+Word & A & B & C & D \\
+\midrule
+1 & 2 & 1 &   &   \\
+2 &   &   & 1 & 2 \\
+3 & 1 & 1 &   & 1 \\
+4 & 3 &   &   &   \\
+\bottomrule
+\end{tabular}
+\end{column}
+
+\begin{column}{.45\paperwidth}
+Situation 2:
+
+\begin{tabular}{lccc}
+\toprule
+Word & A & B & C \\
+\midrule
+1 & 2 & 1 &   \\
+2 & 2 &   & 1 \\
+3 & 1 & 1 & 1 \\
+4 & 3 &   &   \\
+\bottomrule
+\end{tabular}
+\end{column}
+\end{columns}
+
+\begin{outline}
+\1 $p(\textnormal{"selecting category A"}) = \frac{\textnormal{Number of positive events}}{\textnormal{Number of possible events}}$
+\2 Positive events: How often category A has been selected
+\2 Possible events: How many decisions have been made
+\1 $p(\textnormal{"selecting category A"}) = $\\
+\2 Situation 1: $\frac{6}{12}$
+\2 Situation 2: $\frac{8}{12}$
+\end{outline}
+\end{frame}
+
+\begin{frame}{Inter-Annotator Agreement}{Expected Agreement}
+\begin{outline}
+\1 Probability that category $j$ gets selected (by one annotator)
+\begin{equation}
+	\uncover<3->{p_j =} \only<2->{\underbrace{\frac{1}{nN}}_{\textnormal{Possible events (all annotations)}} \times}\underbrace{\sum_{i=1}^N n_{i,j}}_{\textnormal{positive events (=annotations with } j \textnormal{)}}\nonumber
+\end{equation}
+\1<4-> Probability that two annotators select category $j$
+\begin{equation*}
+	p_j \times p_j = p_j^2
+\end{equation*}
+\1<5-> Probability that two annotators are in agreement (over all categories):
+\begin{equation}
+P_e = \sum_{j=1}^k p_j^2\nonumber
+\end{equation}
+\end{outline}
+\end{frame}
+
+
+
+\begin{frame}{Fleiss' Kappa \parencite{Fleiss:1971aa}}
+
+\begin{eqnarray*}
+p_j & & \textnormal{Probability for } j \\
+\begin{ensuremath}
+\hat P_i
+\end{ensuremath} & & \textnormal{Observed agreement for } i\\
+\only<2->{P_o & = & \frac{1}{N} \sum_{i=1}^N \hat P_i \\}
+\only<3->{P_e & = & \sum_{j=1}^k p_j^2 \\}
+\only<4->{\kappa & = & \frac{P_o-P_e}{1-P_e}}
+\end{eqnarray*}
+
+\begin{outline}
+\only<5->{
+\1 $P_o - P_e$: Tatsächlich erreichtes, nicht-zufälliges Agreement
+\1 $1 - P_e$: Maximal erreichbares, nicht-zufälliges Agreement
+}
+\only<6->{
+\1 $-\infty < \kappa < 1$: Je höher desto besser
+\2 Extremfälle?
+}
+\end{outline}
+\end{frame}
+
+\end{document}
