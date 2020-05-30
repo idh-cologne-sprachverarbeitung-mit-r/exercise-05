@@ -4,6 +4,7 @@ atm <- function(amount) {
     List <- list(A="500", B="200", C="100", D="50", E="20", F="10", G="5")
     List2 <- list(0, 0, 0, 0, 0, 0, 0)
     if(amount  %% 5 == 0 && amount != 0) {
+        as.numeric(List[[col]])
         for (col in 1:length(List)) {
             a <- amount / List[[col]] 
             roundDown <- floor(a)
