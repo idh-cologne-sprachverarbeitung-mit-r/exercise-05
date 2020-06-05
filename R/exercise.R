@@ -11,6 +11,8 @@ atm <- function(amount) {
             roundDown <- floor(a)
             List2[[col]] <- roundDown 
             amount <- amount - List[[col]] * roundDown
+            string <- as.character(List[[col]])
+            List[[col]] <- string
         }    
         unlistedlist <- unlist(List)
         unlistedlist2 <- unlist(List2)
