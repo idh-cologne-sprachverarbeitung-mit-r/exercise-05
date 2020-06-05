@@ -12,8 +12,10 @@ atm <- function(amount) {
             List2[[col]] <- roundDown 
             amount <- amount - List[[col]] * roundDown
         }    
-        print(List)
-        print(List2)
+        unlistedlist <- unlist(List)
+        unlistedlist2 <- unlist(List2)
+        print(unlistedlist)
+        print(unlistedlist2)
     } else print("Please enter a valid amount.")
 }
                  
