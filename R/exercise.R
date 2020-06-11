@@ -14,10 +14,9 @@ atm <- function(amount) {
             string <- as.character(List[[col]])
             List[[col]] <- string
         }    
-        unlistedlist <- unlist(List)
-        unlistedlist2 <- unlist(List2)
-        print(unlistedlist)
-        print(unlistedlist2)
+       
+        print(List)
+        print(List2)
     } else print("Please enter a valid amount.")
 }
                  
