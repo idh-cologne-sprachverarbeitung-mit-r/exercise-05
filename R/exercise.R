@@ -5,22 +5,18 @@ atm <- function(amount) {
     List2 <- list(0, 0, 0, 0, 0, 0, 0)
     if(amount  %% 5 == 0 && amount != 0) {
         for (col in 1:length(List)) {
-            number <- as.numeric(List[[col]])
-            List[[col]] <- number
             a <- amount / List[[col]] 
             roundDown <- floor(a)
             List2[[col]] <- roundDown 
             amount <- amount - List[[col]] * roundDown
             string <- as.character(List[[col]])
-            List[[col]] <- string
         }    
        
-        print(List)
-        print(List2)
+        names(List2) <- List
+        List2
     } else print("Please enter a valid amount.")
 }
                  
-    
 # ursprüngliche Lösung
 # atm <- function(amount) {
 #     mtrx <- matrix(c(500, 200, 100, 50, 20, 10, 5, 0, 0, 0, 0, 0, 0, 0), nrow = 2, ncol = 7, byrow = TRUE)
