@@ -17,7 +17,6 @@ atm <- function(amount) {
     } else print("Please enter a valid amount.")
 }
                
-               
 # ursprüngliche Lösung
 # atm <- function(amount) {
 #     mtrx <- matrix(c(500, 200, 100, 50, 20, 10, 5, 0, 0, 0, 0, 0, 0, 0), nrow = 2, ncol = 7, byrow = TRUE)
