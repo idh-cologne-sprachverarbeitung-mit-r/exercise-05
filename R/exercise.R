@@ -11,6 +11,8 @@ atm <- function(amount) {
   returned
 }
 
+# This is a horrible solution and I'm sure there are simpler non-imperative
+# solutions to do this.
 po <- function(matrix) {
   pairwise.agreement <- rowSums(matrix*(matrix-1))
 
