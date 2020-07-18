@@ -4,10 +4,30 @@ atm <- function(amount) {
   notes = list(500, 200, 100, 50, 20, 10, 5)
   returned <- list("500"=0, "200"=0, "100"=0, "50"=0, "20"=0, "10"=0, "5"=0)
   for(note in notes) {
-    print(amount)
     floored <- floor(amount / note)
     returned[toString(note)] = floored
     amount <- amount - note*floored
   }
   returned
+}
+
+po <- function(matrix) {
+  pairwise.agreement <- rowSums(matrix*(matrix-1))
+
+  max.agreements <- rep(0, nrow(matrix))
+  for(row in 1:nrow(matrix)) {
+    max.agreements[row] = (
+      sum((matrix[row,]*(matrix[row,]-1)))
+      /
+      (sum(matrix[row,])*(sum(matrix[row,])-1))
+    )
+  }
+  mean(max.agreements)
+}
+
+pe <- function(matrix) {
+  n <- sum(matrix[1,])
+  pjs <- colSums(matrix) / (nrow(matrix) * n)
+  agreement <- sum(pjs^2)
+  agreement
 }
